@@ -2,29 +2,45 @@ package com.klymenko.fibonacciserver.service;
 
 import com.klymenko.fibonacciserver.thrift.Fibonacci;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class FibonacciHandler implements Fibonacci.Iface {
 
-    public static LinkedList<Long> fibonacci(long n) {
-        LinkedList<Long> result = new LinkedList<>();
-        if(n < 0) return result;
-        long first = 0;
-        result.add(first);
-        if(n < 1) return result;
-        long second = 1;
-        result.add(second);
-
-        while(first + second <= n) {
-            result.add(first + second);
-            long tmp = second;
-            second = first + second;
-            first = tmp;
+    private long prev = 0l;
+    private long current = 1l;
+    private LinkedList<Long> cachedResults = new LinkedList<Long>() {
+        {
+            add(prev);
+            add(current);
         }
-        return result;
+    };
+
+    public List<Long> fibonacci(long n) {
+        if(n < 0) return Collections.EMPTY_LIST;
+        if(n < 1) return cachedResults.subList(0, 1);
+
+        if(prev + current > n) {
+            int cnt = 1;
+            for(Long value: cachedResults) {
+                if(prev + current <= value) {
+                    return cachedResults.subList(0, cnt);
+                }
+                cnt++;
+            }
+        }
+
+        while(prev + current <= n) {
+            cachedResults.add(prev + current);
+            long tmp = current;
+            current = prev + current;
+            prev = tmp;
+        }
+        return cachedResults;
     }
 
-    public LinkedList<Long> calculate(long data) {
+    public List<Long> calculate(long data) {
         return fibonacci(data);
     }
 }

@@ -64,4 +64,32 @@ public class FibonacciHandlerTest {
 
         Assert.assertTrue(actualFibonacciSequence.containsAll(expectedFibonacciSequence));
     }
+
+    @Test
+    public void testFibonacciSequenceExactValue() {
+        List<Long> expectedFibonacciSequence = new LinkedList<Long>() {
+            {
+                add(0l);
+                add(1l);
+                add(1l);
+                add(2l);
+                add(3l);
+                add(5l);
+                add(8l);
+                add(13l);
+                add(21l);
+                add(34l);
+                add(55l);
+                add(89l);
+                add(144l);
+            }
+        };
+        FibonacciHandler fibonacciHandler = new FibonacciHandler();
+
+        List<Long> actualFibonacciSequence = fibonacciHandler.calculate(144);
+
+        Assert.assertEquals(expectedFibonacciSequence.size(), actualFibonacciSequence.size());
+
+        Assert.assertTrue(actualFibonacciSequence.containsAll(expectedFibonacciSequence));
+    }
 }
