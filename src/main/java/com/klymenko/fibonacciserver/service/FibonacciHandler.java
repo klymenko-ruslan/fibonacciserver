@@ -23,11 +23,17 @@ public class FibonacciHandler implements Fibonacci.Iface {
 
         if(prev + current > n) {
             int cnt = 1;
+            Long localPrev = null;
             for(Long value: cachedResults) {
-                if(prev + current <= value) {
-                    return cachedResults.subList(0, cnt);
+                if(localPrev == null) {
+                    localPrev = value;
+                    continue;
                 }
                 cnt++;
+                if(localPrev + value > n) {
+                    return cachedResults.subList(0, cnt);
+                }
+                localPrev = value;
             }
         }
 
